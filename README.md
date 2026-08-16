@@ -1,7 +1,14 @@
-# Veiled Verses
+# Things Never Said
 
-A dark, mystery-inspired poetry journal built as a lightweight static site.
+An interactive CSS-3D poetry book built with React and Vite.
 
-Open `index.html` in a browser to view it. Use **Add a poem** to create entries; these are saved only in that browser via local storage.
+## Run locally
 
-For a shared, permanent poetry archive, the next step is connecting this interface to a small database and protected author login.
+```bash
+npm install
+npm run dev
+```
+
+Press the small pen in the lower-right corner (or press `A`) after opening the book to enter author mode. Pages written there are saved in the browser only.
+
+Edit `src/data/config.js` for the author name and introduction. Edit `src/data/pages.js` for the placeholder collection.

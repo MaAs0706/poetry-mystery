@@ -1,0 +1,1 @@
+export default function Lamp(){return <><div className="lamp-light"/><div className="lamp" aria-hidden="true"><div className="lamp-shade"/><div className="lamp-neck"/><div className="lamp-base"/></div></>}
