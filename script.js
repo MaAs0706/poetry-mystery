@@ -1,18 +1,17 @@
 const defaultPoems = [
-  { title: "The house keeps secrets", date: "2026-08-14", author: "M.", body: "At night, the hallway learns\nto hold its breath.\n\nEven the doors are listening." },
-  { title: "A small constellation", date: "2026-08-03", author: "M.", body: "I kept your name\nunder my tongue\nuntil it became\na light I could follow." },
-  { title: "After the rain", date: "2026-07-28", author: "M.", body: "The garden was full\nof silver evidence —\nevery leaf remembering\nwhere the sky had been." }
+  { title: "The night knows", date: "June 2026", body: "There are things the night understands\nwithout asking for an explanation.\n\nThe way a window stays awake.\nThe way a name can fill a room.\nThe way we become quieter\nwhen we are almost honest." },
+  { title: "A room with no answers", date: "May 2026", body: "I left the lamp on for you.\n\nNot because I thought you would come back,\nbut because some absences\nare easier to sit beside\nwhen they have somewhere warm to go." },
+  { title: "The familiar dark", date: "April 2026", body: "The dark was never empty.\nIt had your footsteps in it,\na little rain,\nand every word I held back\nfor fear it might become true." }
 ];
-const key = "veiled-verses-poems";
-let poems = JSON.parse(localStorage.getItem(key) || "null") || defaultPoems;
-const grid = document.querySelector("#poemGrid");
-const count = document.querySelector("#poemCount");
-const dialog = document.querySelector("#poemDialog");
-const escape = value => String(value).replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const storageKey = "quiet-poetry-collection";
+let poems = JSON.parse(localStorage.getItem(storageKey) || "null") || defaultPoems;
+const safe = text => String(text).replace(/[&<>\"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[char]));
 function render() {
-  grid.innerHTML = poems.map((poem, i) => `<article class="poem"><div class="poem-meta"><span>${String(i + 1).padStart(2, "0")}</span><time>${new Date(poem.date + "T12:00:00").toLocaleDateString("en", { month:"short", year:"numeric" }).toUpperCase()}</time></div><h3>${escape(poem.title)}</h3><p class="poem-preview">${escape(poem.body.split("\n").slice(0, 4).join("\n"))}</p><span class="poem-author">${escape(poem.author || "Anonymous")}</span></article>`).join("");
-  count.textContent = `${poems.length} ${poems.length === 1 ? "piece" : "pieces"}, for now.`;
+  document.querySelector("#contentsList").innerHTML = poems.map((poem, i) => `<li><a href="#poem-${i}"><span>${safe(poem.title)}</span><time>${safe(poem.date)}</time></a></li>`).join("");
+  document.querySelector("#writing").innerHTML = poems.map((poem, i) => `<article class="piece" id="poem-${i}"><p class="piece-number">${String(i + 1).padStart(2, "0")}</p><h3>${safe(poem.title)}</h3><p class="date">${safe(poem.date)}</p><p class="poem-text">${safe(poem.body)}</p><p class="piece-sign">— her name</p></article>`).join("");
 }
-document.querySelectorAll("#openEditor, #openEditorFooter").forEach(button => button.addEventListener("click", () => { dialog.showModal(); document.querySelector("input[name=title]").focus(); }));
-document.querySelector("#poemForm").addEventListener("submit", event => { event.preventDefault(); const data = Object.fromEntries(new FormData(event.currentTarget)); poems.unshift(data); localStorage.setItem(key, JSON.stringify(poems)); render(); dialog.close(); event.currentTarget.reset(); });
+const dialog = document.querySelector("#poemDialog");
+document.querySelectorAll("#openEditor, #openEditorList").forEach(button => button.addEventListener("click", () => dialog.showModal()));
+document.querySelector("#poemForm").addEventListener("submit", event => { event.preventDefault(); const form = new FormData(event.currentTarget); poems.unshift({ title:form.get("title"), date:"new", body:form.get("body") }); localStorage.setItem(storageKey, JSON.stringify(poems)); render(); event.currentTarget.reset(); dialog.close(); });
+addEventListener("scroll", () => { document.querySelector("#progress").style.width = `${scrollY / (document.documentElement.scrollHeight - innerHeight) * 100}%`; });
 render();
