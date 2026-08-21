@@ -5,6 +5,7 @@ import { pages as seedPages } from './data/pages';
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export default function App() {
+  
 
   const [phase, setPhase] = useState('CLOSED'); const [spreadStart, setSpreadStart] = useState(0); const [turning, setTurning] = useState(false); const [turnDirection, setTurnDirection] = useState('forward'); const [typed, setTyped] = useState(['', '', '']);
   const [pages, setPages] = useState(() => JSON.parse(localStorage.getItem('found-book-pages-v2') || 'null') || seedPages); const [authorMode, setAuthorMode] = useState(false); const [draft, setDraft] = useState({ title: 'Untitled', date: '', body: '' }); const lock = useRef(false);
